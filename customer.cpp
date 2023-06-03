@@ -82,6 +82,8 @@ void Customer::showHistory(){
             transaction += history[i].getVector(j) + " ";
         }
 
+        transaction.erase(transaction.find_last_not_of(" \n\r\t")+1);
+
         cout << transaction << endl;
     }
 
