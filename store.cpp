@@ -261,7 +261,7 @@ bool Store::returnItem(Commands &action){
 
     //checks if account exists
     if(!accounts.isAccount(stoi(fields[0]))){
-        cout << "Account does not exist";
+        cout << "Account does not exist" << endl;
         return false;
     }
 
@@ -270,7 +270,7 @@ bool Store::returnItem(Commands &action){
 
     //checks if command requests DVD
     if(fields[1] != "D"){
-        cout << "Item is unavailable";
+        cout << "Item is unavailable" << endl;
 
         tempCustomer = nullptr;
         delete tempCustomer;
@@ -295,7 +295,7 @@ bool Store::returnItem(Commands &action){
 
         //checks if the Item exists
         if(findComedy(tempComedy) == nullptr){
-            cout << "Comedy item is unavailable";
+            cout << "Comedy item is unavailable" << endl;
 
             tempCustomer = nullptr;
             delete tempCustomer;
@@ -307,13 +307,14 @@ bool Store::returnItem(Commands &action){
         for(int i = 0; i < tempCustomer -> getItemsOut().size(); i++){
             if(action.getVector(1) == tempCustomer -> getItemsOut(i)){
                 borrowed = true;
+            cout << "Account has already checked this item out" << endl;
                 break;
             }
         }
 
         //if item is not borrowed, do not return
         if(!borrowed){
-            cout << "This item is not checked out to this account";
+            cout << "This item is not checked out to this account" << endl;
 
             tempCustomer = nullptr;
             delete tempCustomer;
@@ -360,7 +361,7 @@ bool Store::returnItem(Commands &action){
 
         //checks if the Item exists
         if(findDrama(tempDrama) == nullptr){
-            cout << "Drama item is unavailable";
+            cout << "Drama item is unavailable" << endl;
 
             tempCustomer = nullptr;
             delete tempCustomer;
@@ -378,7 +379,7 @@ bool Store::returnItem(Commands &action){
 
         //if item is not borrowed, do not return
         if(!borrowed){
-            cout << "This item is not checked out to this account";
+            cout << "This item is not checked out to this account" << endl;
 
             tempCustomer = nullptr;
             delete tempCustomer;
@@ -421,7 +422,7 @@ bool Store::returnItem(Commands &action){
 
         //checks if the Item exists
         if(findClassic(tempClassic) == nullptr){
-            cout << "Classic item is unavailable";
+            cout << "Classic item is unavailable" << endl;
 
             tempCustomer = nullptr;
             delete tempCustomer;
@@ -439,7 +440,7 @@ bool Store::returnItem(Commands &action){
 
         //if item is not borrowed, do not return
         if(!borrowed){
-            cout << "This item is not checked out to this account";
+            cout << "This item is not checked out to this account" << endl;
 
             tempCustomer = nullptr;
             delete tempCustomer;
@@ -474,7 +475,7 @@ bool Store::returnItem(Commands &action){
             return true;
         }
     }else{
-        cout << "Item requested is not recognized";
+        cout << "Item requested is not recognized" << endl;
 
         tempCustomer = nullptr;
         delete tempCustomer;
@@ -505,7 +506,7 @@ bool Store::borrowItem(){
 
     //checks if account exists
     if(!accounts.isAccount(stoi(fields[0]))){
-        cout << "Account does not exist";
+        cout << "Account does not exist" << endl;
         return false;
     }
 
@@ -513,7 +514,7 @@ bool Store::borrowItem(){
 
     //checks if command requests DVD
     if(fields[1] != "D"){
-        cout << "Item is not recognized";
+        cout << "Item is not recognized" << endl;
 
         tempCustomer = nullptr;
         delete tempCustomer;
@@ -548,7 +549,7 @@ bool Store::borrowItem(){
         if(inventory.getComedyTree() -> minorSearch(&tempComedy) == nullptr)//-> item) 
         //if (findComedy(tempComedy)) {
         {
-            cout << "Comedy item is unavailable";
+            cout << "Comedy item is unavailable" << endl;
 
             tempCustomer = nullptr;
             delete tempCustomer;
@@ -561,7 +562,7 @@ bool Store::borrowItem(){
         for(int i = 0; i < tempCustomer -> getItemsOut().size(); i++){
             //replace vector(1) for all the data smushed together except a
             if(action.getVector(1) == tempCustomer -> getItemsOut(i)){
-                cout << "Account has already checked this comedy item out";
+                cout << "Account has already checked this comedy item out" << endl;
 
                 tempCustomer = nullptr;
                 delete tempCustomer;
@@ -632,7 +633,7 @@ bool Store::borrowItem(){
         if(inventory.getDramaTree() -> minorSearch(&tempDrama) == nullptr)//-> item) 
         //if (findComedy(tempComedy)) {
         {
-            cout << "Drama item is unavailable";
+            cout << "Drama item is unavailable" << endl;
 
             tempCustomer = nullptr;
             delete tempCustomer;
@@ -653,7 +654,7 @@ bool Store::borrowItem(){
         //checks if Customer has already borrowed this Item
         for(int i = 0; i < tempCustomer -> getItemsOut().size(); i++){
             if(action.getVector(1) == tempCustomer -> getItemsOut(i)){
-                cout << "Account has already checked this drama item out";
+                cout << "Account has already checked this drama item out" << endl;
 
                 tempCustomer = nullptr;
                 delete tempCustomer;
@@ -668,7 +669,7 @@ bool Store::borrowItem(){
         if(popularDrama.isPopular(&tempDrama)){
             requestedDrama = popularDrama.search(&tempDrama);
         }else{
-            requestedDrama = findDrama(tempDrama);
+            requestedDrama = findDrama(tempDrama); //I don't think this works
         }
 
         //checks if the Item is available
@@ -725,7 +726,7 @@ bool Store::borrowItem(){
         if(inventory.getClassicTree() -> minorSearch(&tempClassic) == nullptr)//-> item) 
         //if (findComedy(tempComedy)) {
         {
-            cout << "Classic item is unavailable";
+            cout << "Classic item is unavailable" << endl;
 
             tempCustomer = nullptr;
             delete tempCustomer;
@@ -749,7 +750,7 @@ bool Store::borrowItem(){
         //checks if Customer has already borrowed this Item
         for(int i = 0; i < tempCustomer -> getItemsOut().size(); i++){
             if(action.getVector(1) == tempCustomer -> getItemsOut(i)){
-                cout << "Account has already checked this classic item out";
+                cout << "Account has already checked this classic item out" << endl;
 
                 tempCustomer = nullptr;
                 delete tempCustomer;
@@ -807,7 +808,7 @@ bool Store::borrowItem(){
             return false;
         }
     }else{
-        cout << "Item requested is not recognized";
+        cout << "Item requested is not recognized" << endl;
 
         tempCustomer = nullptr;
         delete tempCustomer;
