@@ -84,7 +84,7 @@ usable types for premade hash functions, mostly for outside use
 int HashAccounts::hashFunction(int id)
 {
 	// check if the id is too small
-	if (id < 1000)
+	if (id < 0000 && id > 9999) 
 	{
 		return -1;
 	}
@@ -262,7 +262,7 @@ Customer* HashAccounts::search(int id)
 
             // while the account isn't found
             if(looky != nullptr){
-                while (looky->next != nullptr) {
+                while (looky != nullptr) {
                     // check if the account ID matches the one being looked for
                     if (looky->data != nullptr && looky->data->getID() == id) {
                         // return the found account
