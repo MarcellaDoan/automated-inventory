@@ -18,12 +18,16 @@
         setStock(stoi(command.getVector(1)));
         setYear(stoi(command.getVector(4)));
         setGenre('D');
+
+        setHashString(command.getVector(3) + command.getVector(2));
     }
 
     Drama::Drama(string director, string title)
     {
         setDirector(director);
         setTitle(title);
+
+        setHashString(title + director);
     }
 
     Drama::~Drama() 
