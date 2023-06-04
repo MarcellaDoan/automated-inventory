@@ -115,8 +115,8 @@ void HashAccounts::insert(Customer* account)
 			// create a nodedata equal to the first node in the linked list
 			NodeData<Customer> *start = &accounts[hashIndex];
 			// create a pointer to traverse the linked list starting at the 2 node
-			NodeData<Customer> *temp;
-			temp = &*start;
+			//NodeData<Customer> *temp;
+			//temp = &*start;
 
 			if (start->next == nullptr) 
 			{
