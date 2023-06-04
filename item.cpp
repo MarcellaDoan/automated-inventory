@@ -75,7 +75,7 @@
 
     string Item::getHashString() 
     {
-        
+        return hashString;
     }
 
     void Item::setHashString(string hash) 
