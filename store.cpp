@@ -635,11 +635,28 @@ bool Store::borrowItem(){
 
         Comedy *requestedComedy;
 
-        //retrieve popular item
+        //retrieve popular item, and put in popular if possible
         if(popularComedy.isPopular(&tempComedy)){
             requestedComedy = popularComedy.search(&tempComedy);
         }else{
+
             requestedComedy = findMinorComedy(tempComedy);
+            if (requestedComedy != nullptr) {
+                //set comedy item in popularity list
+                //not full
+                if(!popularComedy.isFull() && requestedComedy != nullptr){
+                    //item is already in list
+                    //if(*requestedComedy != *popularComedy.search(requestedComedy)){
+                        popularComedy.insert(requestedComedy);
+                    //}
+                //full
+                }else{
+                    if(requestedComedy -> getPopularity() > popularComedy.getLowestPopular() -> getPopularity()){
+                        popularComedy.swap(requestedComedy, popularComedy.getLowestPopular());
+                    }
+                }
+            }
+            
         }
 
         //checks if the Item is available
@@ -650,7 +667,7 @@ bool Store::borrowItem(){
 
             //set comedy item in popularity list
             //not full
-            if(!popularComedy.isFull()){
+            /*if(!popularComedy.isFull()){
                 //item is already in list
                 if(*requestedComedy != *popularComedy.search(requestedComedy)){
                     popularComedy.insert(requestedComedy);
@@ -660,7 +677,7 @@ bool Store::borrowItem(){
                 if(requestedComedy -> getPopularity() > popularComedy.getLowestPopular() -> getPopularity()){
                     popularComedy.swap(requestedComedy, popularComedy.getLowestPopular());
                 }
-            }
+            }*/
 
             tempCustomer = nullptr;
             delete tempCustomer;
@@ -740,12 +757,39 @@ bool Store::borrowItem(){
 
         Drama *requestedDrama;
 
+        //retrieve popular item, and put in popular if possible
+        if(popularDrama.isPopular(&tempDrama)){
+            requestedDrama = popularDrama.search(&tempDrama);
+        }else{
+            
+            requestedDrama = findMinorDrama(tempDrama);
+            if (requestedDrama != nullptr) {
+                //set drama item in popularity list
+                //not full
+                if(!popularDrama.isFull()){
+                    //item is already in list
+                    //if(*requestedComedy != *popularComedy.search(requestedComedy)){
+                        popularDrama.insert(requestedDrama);
+                    //}
+                //full
+                }else{
+                    if(requestedDrama -> getPopularity() > popularDrama.getLowestPopular() -> getPopularity()){
+                        popularDrama.swap(requestedDrama, popularDrama.getLowestPopular());
+                    }
+                }
+            }
+            
+        }
+
+
+
+        /**
         //retrieve popular item
         if(popularDrama.isPopular(&tempDrama)){
             requestedDrama = popularDrama.search(&tempDrama);
         }else{
             requestedDrama = findMinorDrama(tempDrama); //I don't think this works
-        }
+        }*/
 
         //checks if the Item is available
         if(requestedDrama -> getStock() > 0){
@@ -755,7 +799,7 @@ bool Store::borrowItem(){
 
             //set num of requests for popularity list
             //not full
-            if(!popularDrama.isFull()){
+            /*if(!popularDrama.isFull()){
                 //item is already in list
                 if(*requestedDrama != *popularDrama.search(requestedDrama)){
                     popularDrama.insert(requestedDrama);
@@ -765,7 +809,7 @@ bool Store::borrowItem(){
                 if(requestedDrama -> getPopularity() > popularDrama.getLowestPopular() -> getPopularity()){
                     popularDrama.swap(requestedDrama, popularDrama.getLowestPopular());
                 }
-            }
+            }*/
 
             tempCustomer = nullptr;
             delete tempCustomer;
@@ -777,6 +821,7 @@ bool Store::borrowItem(){
         }else{
             cout << "Drama Dvd not avaible, placed in waitlist." << endl;                      
                 //never makes it here
+
             Commands *command = new Commands();
             command->makeCopy(action);
             waitlist.insert(command);
@@ -843,10 +888,26 @@ bool Store::borrowItem(){
         //MAKE ANOTHER minorSearch for popularHash
 
         //retrieve popular item
+        
         if(popularClassic.isPopular(&tempClassic)){
             requestedClassic = popularClassic.search(&tempClassic);
         }else{
+        
             requestedClassic = findMinorClassic(tempClassic);
+            if (requestedClassic != nullptr) {
+                if(!popularClassic.isFull() && requestedClassic != nullptr){
+                    //item is already in list
+                    //if(*requestedClassic != *popularClassic.search(requestedClassic)){
+                        popularClassic.insert(requestedClassic);
+                    //}
+                    //full
+                }else{
+                    if(requestedClassic -> getPopularity() > popularClassic.getLowestPopular() -> getPopularity()){
+                        popularClassic.swap(requestedClassic, popularClassic.getLowestPopular());
+                    }
+                }
+            }
+            
         }
 
         //checks if the Item is available
@@ -857,6 +918,7 @@ bool Store::borrowItem(){
 
             //set num of requests for popularity list
             //not full
+            /*
             if(!popularClassic.isFull()){
                 //item is already in list
                 if(*requestedClassic != *popularClassic.search(requestedClassic)){
@@ -867,7 +929,7 @@ bool Store::borrowItem(){
                 if(requestedClassic -> getPopularity() > popularClassic.getLowestPopular() -> getPopularity()){
                     popularClassic.swap(requestedClassic, popularClassic.getLowestPopular());
                 }
-            }
+            }*/
 
             tempCustomer = nullptr;
             delete tempCustomer;
