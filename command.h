@@ -16,6 +16,13 @@ using namespace std;
 class Commands
 {
 public:
+	//default constructor
+	Commands();
+
+	//copy constructor
+	//Commands(const Commands &rhs);
+
+	//destructor
 	~Commands();
 	// does the parsing of the command and assigns to the data members
 	Commands(string command);
@@ -37,9 +44,16 @@ public:
 	//returns true if no errors were found and the command is usable
 	bool isValid();
 
+	//compares comands without the command type, allows comparison between borrow and
+	//return commands
+	bool isEqual(const Commands& rhs);
+
+	void makeCopy(const Commands& rhs);
+
 	//comparison overloads - checks for identical command objects
 	bool operator==(const Commands& rhs) const;
 	bool operator!=(const Commands& rhs) const;
+
 
 private:
 	// vector of strings to store the command after parsing at commas
