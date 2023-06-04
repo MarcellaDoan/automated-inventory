@@ -1,3 +1,13 @@
+/*
+    Classic.h: The h file for Classic.cpp, a classic movie of a dvd, holds a title, director, ammount of stock in inventory, a genre, date of release, and 
+    major actors. 
+
+    Created by: Marcella Doan
+
+    Debugged by: 
+    Steven Wenzel
+    Long Ly
+*/
 #ifndef CLASSIC_H
 #define CLASSIC_H
 
@@ -7,11 +17,10 @@ class Classic : public Dvd
 {
 public:
 	Classic();
-	// passes in a command that contains all the needed data to create a Classic object
 	Classic(Commands command);
+	Classic(int month, int year, string firstName, string lastName); 
 	~Classic();
 
-	// return the month
 	int getMonth() const;
 
 	void setMonth(const int newMonth);
@@ -22,10 +31,8 @@ public:
 
 	void addMajorActor(string actor); 
 
-	int getNumberOfActors() const; //returns the number of major actors in this object (the nextActorIndex works for this)
+	int getNumberOfActors() const; //returns the number of major actors in this object 
 
-	//comparison overloads - sorted by release date then major actor
-	// a classic movie is equal if the director, title and data are the same
 	bool operator==(const Classic& rhs) const;
 	bool operator!=(const Classic& rhs) const;
 	bool operator>(const Classic& rhs) const;
@@ -39,17 +46,12 @@ public:
     Classic& operator+= (const Classic& rhs); 
 	Classic& operator=(const Classic& rhs); 
 
+	bool isEqual(const Classic& rhs) const;
 private:
-	// major actor's first name
-	//string first = "";
-	// major actor's last name
-	//string last = "";
-	// month of release for classics
+	
 	int month = 0;
-	int nextActorIndex = 0; //the index to use when inserting a new actor
+	int nextActorIndex = 0; //the amount of actors
 
 	vector<string> majorActors;
-
-	//BSTree<Classic> bstree(); 
 };
 #endif // CLASSIC_H
