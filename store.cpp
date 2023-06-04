@@ -72,7 +72,7 @@ void Store::setStock(){
 
             Classic *classicFromTree = findClassic(*newClassic);
 
-            if(findClassic(*newClassic) == nullptr){ //things are being entered twice
+            if(findClassic(*newClassic) == nullptr){ //find classic not working? 
                 inventory.getClassicTree() -> insert(newClassic);
                 increaseTotal();
             }else{
@@ -166,6 +166,7 @@ void Store::readFiles(){
                     }else if(letter == "B" || letter == "R"
                         || letter == "I" || letter == "H"){
                         actions.push_back(tempCom);
+                        //act++;
                     //not a recognized command
                     }//close command check
                 }
@@ -201,6 +202,21 @@ Drama* Store::findDrama(Drama& dramaDvd){
     //search via director then title
     //return inventory.getDramaTree() -> search(&dramaDvd) -> item;
 
+    if (inventory.getDramaTree() -> search(&dramaDvd) == nullptr)
+    {
+        return nullptr;
+    } else 
+    {
+        return inventory.getDramaTree() -> search(&dramaDvd) -> item;
+    }
+}//close findDrama
+
+Drama* Store::findMinorDrama(Drama& dramaDvd){
+    //checks that the first index is D
+    //parse through binary tree for dvd
+    //search via director then title
+    //return inventory.getDramaTree() -> search(&dramaDvd) -> item;
+
     if (inventory.getDramaTree() -> minorSearch(&dramaDvd) == nullptr)
     {
         return nullptr;
@@ -208,10 +224,23 @@ Drama* Store::findDrama(Drama& dramaDvd){
     {
         return inventory.getDramaTree() -> minorSearch(&dramaDvd) -> item;
     }
-}//close findDrama
+}
 
 //
 Comedy* Store::findComedy(Comedy& comedyDvd){
+    //parse through binary tree for dvd
+    //search via title then year released
+    //return 
+    if(inventory.getComedyTree() -> search(&comedyDvd) == nullptr)//-> item)
+    {
+        return nullptr;
+    } else 
+    {
+        return inventory.getComedyTree() -> search(&comedyDvd) -> item;
+    }
+}//close findComedy
+
+Comedy* Store::findMinorComedy(Comedy& comedyDvd){
     //parse through binary tree for dvd
     //search via title then year released
     //return 
@@ -224,8 +253,29 @@ Comedy* Store::findComedy(Comedy& comedyDvd){
     }
 }//close findComedy
 
-// find a classic dvd and verify that it exists
+
 Classic* Store::findClassic(Classic& classic){ //search can't be searching for addres
+    //parse through binary tree for dvd
+    //search via release date then major actor
+
+    //return 
+    if(((inventory.getClassicTree()) -> search(&classic)) == nullptr)
+    {
+        return nullptr; 
+    } else 
+    {
+        //return 
+        return inventory.getClassicTree() -> search(&classic) -> item;
+    }
+    // -> item;
+}
+
+
+
+
+
+// find a classic dvd and verify that it exists
+Classic* Store::findMinorClassic(Classic& classic){ //search can't be searching for addres
     //parse through binary tree for dvd
     //search via release date then major actor
 
@@ -294,7 +344,7 @@ bool Store::returnItem(Commands &action){
         Comedy tempComedy(title, year);
 
         //checks if the Item exists
-        if(findComedy(tempComedy) == nullptr){
+        if(findMinorComedy(tempComedy) == nullptr){
             cout << "Comedy item is unavailable" << endl;
 
             tempCustomer = nullptr;
@@ -322,7 +372,7 @@ bool Store::returnItem(Commands &action){
             return false;
         }
 
-        Comedy *requestedItem = findComedy(tempComedy);
+        Comedy *requestedItem = findMinorComedy(tempComedy);
 
         //checks if there is a waitlist for Item
         if(waitlist.isInWaitlist(&action)){
@@ -350,7 +400,13 @@ bool Store::returnItem(Commands &action){
         }
         //checks request for drama
     }else if(fields[2] == "D"){
-        string director = fields[3] + " " + fields[4];
+
+        string director;
+        for (int i = 3; i < fields.size() - 1; i++) {
+            director += fields[i] + " ";
+        }
+
+        director += fields[fields.size() - 1];
 
         //vector<string> yearVector = (action.spaceParser(action.getVector(2)));
         //int year = stoi(yearVector[0]);
@@ -360,7 +416,7 @@ bool Store::returnItem(Commands &action){
         Drama tempDrama(director, title);
 
         //checks if the Item exists
-        if(findDrama(tempDrama) == nullptr){
+        if(findMinorDrama(tempDrama) == nullptr){
             cout << "Drama item is unavailable" << endl;
 
             tempCustomer = nullptr;
@@ -387,13 +443,15 @@ bool Store::returnItem(Commands &action){
             return false;
         }
 
-        Drama *requestedItem = findDrama(tempDrama);
+        Drama *requestedItem = findMinorDrama(tempDrama);
 
         //checks if there is a waitlist for Item
         if(waitlist.isInWaitlist(&action)){
             tempCustomer -> returnItem(action);
             Customer *waitCustomer = accounts.search(waitlist.remove(&action));
             waitCustomer -> borrow(action);
+
+            cout << "Item lent to next customer on the waitlist" << endl;
 
             tempCustomer = nullptr;
             delete tempCustomer;
@@ -421,7 +479,7 @@ bool Store::returnItem(Commands &action){
         Classic tempClassic(month, year, fields[5], fields[6]);
 
         //checks if the Item exists
-        if(findClassic(tempClassic) == nullptr){
+        if(findMinorClassic(tempClassic) == nullptr){
             cout << "Classic item is unavailable" << endl;
 
             tempCustomer = nullptr;
@@ -448,13 +506,17 @@ bool Store::returnItem(Commands &action){
             return false;
         }
 
-        Classic *requestedItem = findClassic(tempClassic);
+        Classic *requestedItem = findMinorClassic(tempClassic);
 
         //checks if there is a waitlist for Item
         if(waitlist.isInWaitlist(&action)){
             tempCustomer -> returnItem(action);
-            Customer *waitCustomer = accounts.search(waitlist.remove(&action));
-            waitCustomer -> borrow(action);
+            int id = waitlist.remove(&action);
+            if (id != -1) {
+                Customer *waitCustomer = accounts.search(id);
+                waitCustomer -> borrow(action);
+                cout << "Classic item lent to next customer on the waitlist" << endl;
+            }
 
             tempCustomer = nullptr;
             delete tempCustomer;
@@ -545,8 +607,8 @@ bool Store::borrowItem(){
         Comedy tempComedy(title, year);
 
         //checks if the Item exists
-        //if(findComedy(tempComedy) == nullptr){
-        if(inventory.getComedyTree() -> minorSearch(&tempComedy) == nullptr)//-> item) 
+        if(findMinorComedy(tempComedy) == nullptr)
+        //if(inventory.getComedyTree() -> minorSearch(&tempComedy) == nullptr)//-> item) 
         //if (findComedy(tempComedy)) {
         {
             cout << "Comedy item is unavailable" << endl;
@@ -577,7 +639,7 @@ bool Store::borrowItem(){
         if(popularComedy.isPopular(&tempComedy)){
             requestedComedy = popularComedy.search(&tempComedy);
         }else{
-            requestedComedy = findComedy(tempComedy);
+            requestedComedy = findMinorComedy(tempComedy);
         }
 
         //checks if the Item is available
@@ -608,7 +670,13 @@ bool Store::borrowItem(){
             return true;
         //item unavailable
         }else{
-            waitlist.insert(&action);
+            cout << "Comedy Dvd not avaible, placed in waitlist." << endl;
+
+            Commands *command = new Commands();
+            command->makeCopy(action);
+            //waitlist.insert(&action);
+            waitlist.insert(command);
+
 
             tempCustomer = nullptr;
             delete tempCustomer;
@@ -619,7 +687,14 @@ bool Store::borrowItem(){
         }
     //checks request for drama
     }else if(fields[2] == "D"){
-        string director = fields[3] + " " + fields[4];
+        //string director = fields[3] + " " + fields[4];
+
+        string director;
+        for (int i = 3; i < fields.size() - 1; i++) {
+            director += fields[i] + " ";
+        }
+
+        director += fields[fields.size() - 1];
 
         //vector<string> yearVector = (action.spaceParser(action.getVector(2)));
         //int year = stoi(yearVector[0]);
@@ -629,8 +704,8 @@ bool Store::borrowItem(){
         Drama tempDrama(director, title);
 
         //checks if the Item exists
-        //if(findComedy(tempComedy) == nullptr){
-        if(inventory.getDramaTree() -> minorSearch(&tempDrama) == nullptr)//-> item) 
+        if(findMinorDrama(tempDrama) == nullptr)
+        //if(inventory.getDramaTree() -> minorSearch(&tempDrama) == nullptr)//-> item) 
         //if (findComedy(tempComedy)) {
         {
             cout << "Drama item is unavailable" << endl;
@@ -654,7 +729,7 @@ bool Store::borrowItem(){
         //checks if Customer has already borrowed this Item
         for(int i = 0; i < tempCustomer -> getItemsOut().size(); i++){
             if(action.getVector(1) == tempCustomer -> getItemsOut(i)){
-                cout << "Account has already checked this drama item out" << endl;
+                cout << "Account has already checked this Drama item out" << endl;
 
                 tempCustomer = nullptr;
                 delete tempCustomer;
@@ -669,7 +744,7 @@ bool Store::borrowItem(){
         if(popularDrama.isPopular(&tempDrama)){
             requestedDrama = popularDrama.search(&tempDrama);
         }else{
-            requestedDrama = findDrama(tempDrama); //I don't think this works
+            requestedDrama = findMinorDrama(tempDrama); //I don't think this works
         }
 
         //checks if the Item is available
@@ -700,7 +775,11 @@ bool Store::borrowItem(){
             return true;
         //item unavailable
         }else{
-            waitlist.insert(&action);
+            cout << "Drama Dvd not avaible, placed in waitlist." << endl;                      
+                //never makes it here
+            Commands *command = new Commands();
+            command->makeCopy(action);
+            waitlist.insert(command);
 
             tempCustomer = nullptr;
             delete tempCustomer;
@@ -767,7 +846,7 @@ bool Store::borrowItem(){
         if(popularClassic.isPopular(&tempClassic)){
             requestedClassic = popularClassic.search(&tempClassic);
         }else{
-            requestedClassic = findClassic(tempClassic);
+            requestedClassic = findMinorClassic(tempClassic);
         }
 
         //checks if the Item is available
@@ -798,7 +877,13 @@ bool Store::borrowItem(){
             return true;
             //item unavailable
         }else{
-            waitlist.insert(&action);
+            cout << "Classic Dvd not avaible, placed in waitlist." << endl;
+
+            Commands *command = new Commands();
+            command->makeCopy(action);
+
+            waitlist.insert(command); //check if this is being inserted and staying inserted
+            //waitlist.insert(&action);
 
             tempCustomer = nullptr;
             delete tempCustomer;
