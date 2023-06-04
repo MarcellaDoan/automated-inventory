@@ -35,9 +35,14 @@ class Item
         // down the stock by one
         void downStock();
 
-	int getPopularity();
+	    int getPopularity();
 	
         void increasePopularity();
+
+        //A string made to be hashed for hash storage stystems
+        string getHashString();
+
+        void setHashString(string hash); 
 
         // addition overloads
         Item operator+ (const Item& rhs) const;
@@ -48,6 +53,7 @@ class Item
         string title = "";
         char itemType;
         int popularity = 0; 
+        string hashString = "";
 };
 
 #endif
