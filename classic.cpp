@@ -43,6 +43,9 @@ params: Command command
         setMonth(month);
         int year = stoi(actorAndDate[3]);
         setYear(year);
+
+
+        setHashString(to_string(month)+to_string(year)+temp);
     }
 
 Classic::Classic(int month, int year, string firstName, string lastName) 
@@ -51,6 +54,8 @@ Classic::Classic(int month, int year, string firstName, string lastName)
     setYear(year);
     string actor = firstName + " " + lastName;
     addMajorActor(actor);
+    
+    setHashString(to_string(month)+to_string(year)+actor);
 }
 
 
@@ -174,6 +179,7 @@ returns: none
 
         return false;
     }
+
 
 	//comparison overloads - sorted by release date then major actor
 	// a classic movie is equal if the director, title and date are the same
