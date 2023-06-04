@@ -7,6 +7,24 @@ the full knowledge that the store class has
 --------------------------------------------------------------------------------------*/
 #include "command.h"
 
+/* ------------------------------------(Commands)--------------------------------------
+Description: defaults everything to empty
+-------------------------------------------------------------------------------------- */
+Commands::Commands() 
+{
+	
+}
+
+/*Commands::Commands(const Commands &rhs) 
+{
+	for (int i = 0; i < this->parsedCommand.size(); i++)
+	{
+		parsedCommand.at(i) = rhs.parsedCommand.at(i);
+	}
+		//return true;
+	//return *this;
+}*/
+
 /* ------------------------------------(~Commands)--------------------------------------
 Description: does nothing no dynamic memory 
 -------------------------------------------------------------------------------------- */
@@ -267,6 +285,43 @@ bool Commands::operator==(const Commands& rhs) const
 	}
 }
 
+/* ------------------------------------(isEqual)--------------------------------------
+Description:  compare the values in the parsed command at index 1,  
+return true if equal. Exclusively used in hashWaitlist. 
+-------------------------------------------------------------------------------------- */ 
+bool Commands::isEqual(const Commands& rhs)
+{
+	// compare the vector sizes and check if null first
+	
+	if (this != NULL && &rhs != NULL); 
+	{
+		//return false;
+	
+
+	if (this->parsedCommand.size() != rhs.parsedCommand.size())
+	{
+		return false;
+	}
+	// go through the vectors
+	else
+	{
+		string toParse = parsedCommand.at(1);
+		vector<string> parsed = spaceParser(toParse);
+		vector<string> rhsParsed = spaceParser(rhs.parsedCommand.at(1));
+
+		for (int i = 1; i < parsed.size(); i++)
+		{
+			// if any value is not equal
+			if (parsed[i] != rhsParsed[i])
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	}
+}
+
 /* ------------------------------------(operator!=)--------------------------------------
 Description:  compare all values in the parsed command, return true if not equal
 -------------------------------------------------------------------------------------- */ 
@@ -281,3 +336,16 @@ bool Commands::operator!=(const Commands& rhs) const
 		return false;
 	}
 }
+
+/* ------------------------------------(operator=)--------------------------------------
+Description: assignment operator
+-------------------------------------------------------------------------------------- */ 
+void Commands::makeCopy(const Commands& rhs) 
+{
+	for (int i = 0; i < rhs.parsedCommand.size(); i++)
+	{
+		parsedCommand.push_back(rhs.parsedCommand.at(i));
+	}
+		//return true;
+	//return *this;
+}	
