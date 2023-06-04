@@ -25,6 +25,9 @@ Description: using the hash index, insert key and value into the hashed vector
 -------------------------------------------------------------------------------------- */
 void HashWaitlist::insert(Commands* command)
 {
+	//Commands *command = new Commands();
+	//command->makeCopy(*oldCommand);
+	
 	// check if the command pointer is empty
 	if (command != nullptr)
 	{
@@ -40,12 +43,33 @@ void HashWaitlist::insert(Commands* command)
 		else
 		{
 			// create a nodedata equal to the first node in the linked list
-			NodeData<Commands> start = waitlist[hashIndex];
+			NodeData<Commands> *start = &waitlist[hashIndex];
 			// create a pointer to traverse the linked list starting at the 2 node
-			NodeData<Commands>* temp = start.next;
 
+			NodeData<Commands> *temp;
+			temp = &*start;
+
+			if (start->next == nullptr) 
+			{
+				start->next = new NodeData<Commands>;
+				// set the new node data to passed command
+				start->next->data = command;
+				// set the new node's next pointer to nullptr
+				start->next->next = nullptr;
+			} else {
+
+				while (start->next != nullptr) 
+				{
+					start = start->next; 
+				}
+
+				start->next = new NodeData<Commands>;
+				start->next->data = command;
+				start->next->next = nullptr;
+
+			}
 			// if temp is not empty
-			if (temp != nullptr)
+			/*if (temp != nullptr)
 			{
 				// go to the end of the linked list
 				while (temp->next != nullptr)
@@ -59,7 +83,7 @@ void HashWaitlist::insert(Commands* command)
 				temp->next->data = command;
 				// set the new node's next pointer to nullptr
 				temp->next->next = nullptr;
-			}
+			}*
 			// if temp is empty
 			else
 			{
@@ -69,10 +93,11 @@ void HashWaitlist::insert(Commands* command)
 				start.next->data = command;
 				// set the new node's next pointer to nullptr
 				start.next->next = nullptr;
-			}
-		}
+			}*/
+		
 		// up the size
 		size++;
+		}
 	}
 }
 
@@ -94,7 +119,7 @@ Commands* HashWaitlist::search(Commands* command)
 
 
     // check if its the first node
-    if(start.data == command){
+    if(start.data != nullptr && start.data->isEqual(*command)){
         return start.data;
     }
     // go through the whole list
@@ -106,7 +131,7 @@ Commands* HashWaitlist::search(Commands* command)
             // while the account isn't found
             for(int i = 0; i < WAITLISTSIZE; i++){
                 // check if the command matches the one being looked for
-                if(looky->data == command && looky->data != nullptr){
+                if(looky->data->isEqual(*command) && looky->data != nullptr){
                     // return the found command
                     return looky->data;
                 }else if (looky->next != nullptr){
@@ -186,11 +211,68 @@ int HashWaitlist::remove(Commands* command)
 		if (search(command) != nullptr)
 		{
 			// find the hashindex
+			int id;// = stoi(command->spaceParser(1).at(0));
 			int hashIndex = hashFunction(command);
 			// create a nodedata equal to the first node in the linked list
-			NodeData<Commands> start = waitlist[hashIndex];
+			NodeData<Commands> *start = &waitlist[hashIndex];
 			// create a pointer to traverse the linked list starting at the 2 node
-			NodeData<Commands>* temp = start.next;
+			//NodeData<Commands>* temp = start.next;
+
+			if (start->next == nullptr) 
+			{
+				int id = stoi(start->data->spaceParser(1).at(0));
+				//start->next = new NodeData<Commands>;
+				//NodeData<Commands>* temp = *start;
+				delete start->data;
+				//delete start;
+				start = nullptr;
+
+				waitlist[hashIndex].data = nullptr;
+				return id;
+				//temp = nullptr;
+				// set the new node data to passed account
+				//start->next->data = account;
+				// set the new node's next pointer to nullptr
+				//start->next->next = nullptr;
+			} else {
+
+				while (start->next != nullptr && (start->next->data->isEqual(*command) == false))
+				{
+					start = start->next; 
+				}
+
+				//int id = stoi(command->spaceParser(1).at(0));
+
+				// insert start's next into the slot in the vector
+				//waitlist[hashIndex] = *start.next;
+
+				int id = stoi(start->data->spaceParser(1).at(0));
+
+				NodeData<Commands>* temp = start->next;
+
+				start->next = start->next->next;
+				//waitlist[hashIndex] = *start;
+
+				delete temp->data;
+
+				temp = nullptr;
+
+				return id;
+
+				// delete the start data
+				//delete start->data;
+				// set start data to nullptr
+				//start.data = nullptr;
+				// set the start next to nullptr
+				//start.next = nullptr;
+
+				//start->next = new NodeData<Customer>;
+				//start->next->data = account;
+				//start->next->next = nullptr;
+
+			}
+			/*
+
 
 			// if the command is at the start
 			if (command == start.data)
@@ -275,8 +357,10 @@ int HashWaitlist::remove(Commands* command)
 	}
 	else
 	{
-		return -1;
+		return -1;*/
 	}
+	}
+	return -1;
 }
 
 /* ------------------------------------(isInWaitlist)--------------------------------------
