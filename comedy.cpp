@@ -41,12 +41,15 @@ char type = 'D'; // Dvd is default if not changed by contructor
         setYear(stoi(command.getVector(4)));
         setGenre('F');
 
+        setHashString(command.getVector(3)+command.getVector(4));
     }
 	
     Comedy::Comedy(string title, int year) 
     {
         setTitle(title);
         setYear(year);
+
+        setHashString(title + to_string(year));
     }
 
     Comedy::~Comedy() 
