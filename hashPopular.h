@@ -42,7 +42,7 @@ private:
 
 	// vector holding the failed borrow commands
 	//vector<T*> popular[10];
-	const static int PopularSize = 10;
+	const static int PopularSize = 2;
 	T* popular[PopularSize];
 	// check the popular vector for the item and return its index if found
 	int searchForSwap(T* item);
@@ -73,6 +73,7 @@ HashPopular<T>::~HashPopular()
 	{
 		// a temp pointer for traversing the popular vector
 		T* temp = popular[i];
+		delete temp;
 		// set temp to nullptr
 		temp = nullptr;
 	}
@@ -92,9 +93,9 @@ int HashPopular<T>::hashFunction(T* item)
 		return -1;
 	}
 	// get the item title from the item object
-	string title = item->getTitle();
+	string hashString = item->getHashString();
 	// call and return the hashMidSqaure on the id
-	return hashStringFold(title, PopularSize);
+	return hashStringFold(hashString, PopularSize);
 }
 
 /* ------------------------------------(insert)--------------------------------------
@@ -145,7 +146,7 @@ T* HashPopular<T>::search(T* item)
             return popular[hashIndex];
         }else{
             // search the whole popular vector linearly
-            for(int i = 0; i < 10; i++) {
+            for(int i = 0; i < PopularSize; i++) {
                 if(popular[i] != nullptr){
                     if(*popular[i] == *item){
                         return popular[i];
@@ -175,7 +176,7 @@ int HashPopular<T>::searchForSwap(T* item)
 	int hashIndex = hashFunction(item);
 
 	// go to the hashIndex in the popular vector and compare with the passed in item
-	if (*popular[hashIndex] == *item)
+	if (popular[hashIndex] != nullptr && popular[hashIndex]->isEqual(*item))
 	{
 		return hashIndex;
 	}
@@ -183,9 +184,9 @@ int HashPopular<T>::searchForSwap(T* item)
 	else
 	{
 		// search the whole popular vector linearly
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < PopularSize; i++)
 		{
-			if(*popular[i] == *item)
+			if((popular[i] != nullptr) && *popular[i] == *item)
 			{
 				return i;
 			}
@@ -193,6 +194,8 @@ int HashPopular<T>::searchForSwap(T* item)
 		// if not found in the popular vector
 		return -1;
 	}
+
+	return -1;
 }
 
 /* ------------------------------------(swap)--------------------------------------
@@ -222,7 +225,7 @@ Description: checks if the hash is full, returns true if its full
 template <class T>
 bool HashPopular<T>::isFull()
 {
-	if (size == 10)
+	if (size == PopularSize)
 	{
 		return true;
 	}
@@ -263,12 +266,15 @@ T* HashPopular<T>::getLowestPopular()
 	int lowest = INT_MAX;
 	int index = 0;
 	// search the whole popular vector for the lowest popular item
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < PopularSize; i++)
 	{
-		if (popular[i]->getPopularity() < lowest)
+		if (popular[i] != nullptr && popular[i]->getPopularity() < lowest)
 		{
 			index = i;
-			lowest = popular[i]->getPopularity();
+			if (popular[i] != nullptr) 
+			{
+				lowest = popular[i]->getPopularity();
+			}
 		}
 	}
 	// return the lowest popular item
