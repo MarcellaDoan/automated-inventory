@@ -73,6 +73,16 @@
         }
 
 
+    string Item::getHashString() 
+    {
+        
+    }
+
+    void Item::setHashString(string hash) 
+    {
+        hashString = hash;
+    }
+
         // addition overloads
         Item Item::operator+ (const Item& rhs) const 
         {
