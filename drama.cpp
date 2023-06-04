@@ -84,7 +84,10 @@
         } else if (getDirector() == rhs.getDirector() && getTitle() > rhs.getTitle()) {
             return false;
             
-        } else {
+        } else if (getDirector() == rhs.getDirector() && getTitle() == rhs.getTitle()){
+            return false;
+        } else 
+        {
             return true;
         }
     }
