@@ -1,3 +1,13 @@
+/*
+    Comedy.h, the h file for Comedy.cpp, a comedy movie of a dvd. Holds a title, director, ammount of stock in inventory, a genre, and year of release.
+
+    Created by: Marcella Doan
+
+    Debugged by:
+    Steven Wenzel
+    Long Ly
+*/
+
 #ifndef COMEDY_H
 #define COMEDY_H
 
@@ -8,8 +18,8 @@ class Comedy : public Dvd
 {
 public:
 	Comedy();
-	// passes in a command that contains all the needed data to create a Comedy object
-	Comedy(Commands command); //build the item with the data from the comand object. 
+	Comedy(Commands command); //build the item with the data from the comand object.
+	Comedy(string title, int year); 
 	~Comedy();
 	
 	//comparison overloads - sorted by title then year
@@ -22,6 +32,7 @@ public:
 	Comedy operator+ (const Comedy& rhs) const;
 	Comedy& operator+= (const Comedy& rhs);
 	
+	bool isEqual(const Comedy& rhs) const;
 
 	//stream overloads
 	// display all the info 
